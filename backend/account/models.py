@@ -8,11 +8,14 @@ from django.db.models import Count, Prefetch, Sum, Q, F
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from cloudinary.models import CloudinaryField
+from django.conf import settings
+
 # from .users.model_mixins import ModelMixin
 
 from .utils import hash_password
 
 # Create your models here.
+term_start = settings.TERM_START_DATE
 
 def permission_default():
     return ['staff']
@@ -365,9 +368,24 @@ class Grade(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     score = models.PositiveIntegerField()
 
+# class Attendance(models.Model):
+#     student = models.ForeignKey(SchoolUser, on_delete=models.CASCADE)
+#     class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
+#     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+#     date = models.DateField()
+#     present = models.BooleanField(default=False)
+
 class Attendance(models.Model):
-    student = models.ForeignKey(SchoolUser, on_delete=models.CASCADE)
-    class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    date = models.DateField()
-    present = models.BooleanField(default=False)
+    user = models.ForeignKey(SchoolUser, on_delete=models.CASCADE)
+    attendance = models.CharField(max_length=150)
+    objects = models.Manager
+
+    def get_dates_absent(self):
+        att = self.attendance
+        return [str(term_start + timedelta(days=i)) for i, at in enumerate(list(att)) if at == '0']
+
+    @classmethod
+    def get_days_absent(cls, class_name):
+        students = cls.objects.filter(user__class_enrolled__name=class_name)
+        return {student.user_id:student.get_dates_absent() for student in list(students)}
+
