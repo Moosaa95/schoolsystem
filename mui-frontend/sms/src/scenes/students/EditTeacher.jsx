@@ -11,7 +11,8 @@ import {
 import React, { useState } from "react";
 import { useEffect } from "react";
 import FlexBetween from "scenes/components/FlexBetween";
-import { useUpdateTeacherMutation } from "state/api";
+// import { useUpdateTeacherMutation } from "state/api";
+import { useUpdateTeacherMutation } from "state/userApiSlice";
 
 
 const STATES = [

@@ -8,8 +8,10 @@ import Header from "scenes/components/Header";
 // import { width } from "@mui/system";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
-import { useAddTeacherMutation } from "state/api";
-import { useGetParentsQuery } from "state/api";
+// import { useAddTeacherMutation } from "state/api";
+// import { useGetParentsQuery } from "state/api";
+import { useGetParentsQuery } from "state/userApiSlice";
+// import useAddT
 
 const ROLES = [
   {

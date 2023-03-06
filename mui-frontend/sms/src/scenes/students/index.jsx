@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, useTheme } from "@mui/material";
-import { useGetStudentsQuery } from "state/api";
+// import { useGetStudentsQuery } from "state/api";
+import { useGetStudentsQuery } from "state/userApiSlice";
 import Header from "scenes/components/Header";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import TeacherDialog from "./TeacherDialog";

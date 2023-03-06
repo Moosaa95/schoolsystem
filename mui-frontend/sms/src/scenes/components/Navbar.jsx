@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   LightModeOutlined,
   DarkModeOutlined,
@@ -7,68 +7,149 @@ import {
   SettingsOutlined,
   ArrowDropDownOutlined,
 } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMode } from "state";
-import { AppBar, IconButton, InputBase, Toolbar, useTheme } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  InputBase,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import FlexBetween from "./FlexBetween";
+import { useGetUserQuery } from "state/userApiSlice";
+import { selectCurrentUser } from "state/authSlice";
+
+const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const dispatch = useDispatch();
+  const theme = useTheme();
+  const [anchorEl, setAnchorEl]  = useState(null);
+  const isOpen = Boolean(anchorEl);
+  const handleClick = (event) => setAnchorEl(event.currentTarget)
+  const handleClose = () => setAnchorEl(null);
+  
+  // const user = useSelector(selectCurrentUser)
+
+  const currentUser = sessionStorage.getItem("username")
+  console.log("🚀 ~ file: Navbar.jsx:39 ~ CUREERNT ~ currentUser", currentUser)
+  
+  const {data : userData, isLoading } = useGetUserQuery(currentUser)
+  console.log('details', 'gjfjfj', userData)
+
+  // useEffect(() => {
+  //   if (userData && !isLoading){
+
+  //   } 
+  // })
 
 
-
-
-const Navbar = ({
-    isSidebarOpen,
-    setIsSidebarOpen
-}) => {
-    const dispatch = useDispatch();
-    const theme =  useTheme()
-  return <AppBar
-  sx={{
-    position : "static",
-    background: "none",
-    boxShadow: "none"
-  }}
-  >
-    <Toolbar
-    sx={{
-        justifyContent:"space-between"
-    }}
+  return (
+    <AppBar
+      sx={{
+        position: "static",
+        background: "none",
+        boxShadow: "none",
+      }}
     >
+      <Toolbar
+        sx={{
+          justifyContent: "space-between",
+        }}
+      >
         <FlexBetween>
-            <IconButton onClick={()=>setIsSidebarOpen(!isSidebarOpen)}>
-                <MenuIcon />
-            </IconButton>
-            <FlexBetween
+          <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            <MenuIcon />
+          </IconButton>
+          <FlexBetween
             backgroundColor={theme.palette.background.alt}
             borderRadius="9px"
             gap="3rem"
             p="0.1rem 1.5rem"
-            >
-                <InputBase placeholder="Search....." />
-                <IconButton>
-                    <Search />
-                </IconButton>
-            </FlexBetween>
+          >
+            <InputBase placeholder="Search....." />
+            <IconButton>
+              <Search />
+            </IconButton>
+          </FlexBetween>
         </FlexBetween>
 
         {/* right side */}
         <FlexBetween gap="1.5rem">
-            <IconButton onClick={() => dispatch(setMode())}>
-                {
-                    theme.palette.mode === "dark" ? (
-                        <DarkModeOutlined sx={{fontSize:"25px"}} />
-                    ): (
-                        <LightModeOutlined sx={{fontSize:"25px"}} />
-                    )
-                }
-            </IconButton>
-            <IconButton>
-                <SettingsOutlined />
-            </IconButton>
+          <IconButton onClick={() => dispatch(setMode())}>
+            {theme.palette.mode === "dark" ? (
+              <DarkModeOutlined sx={{ fontSize: "25px" }} />
+            ) : (
+              <LightModeOutlined sx={{ fontSize: "25px" }} />
+            )}
+          </IconButton>
+          <IconButton>
+            <SettingsOutlined sx={{ fontSize: "25px" }} />
+          </IconButton>
+
+          <FlexBetween>
+            <Button
+              onClick={handleClick}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                textTransform: "none",
+                gap: "1rem",
+              }}
+            >
+              <Box
+                component="img"
+                alt="profile"
+                src="profile"
+                height="32px"
+                width="32px"
+                borderRadius="50px"
+                sx={{ objectFit: "cover" }}
+              />
+              <Box textAlign="left">
+               {userData && (
+                 <Typography
+                 fontWeight="bold"
+                 fontSize="0.8rem"
+                 sx={{ color: theme.palette.secondary[100] }}
+               >
+                 {userData.profile__school_user__first_name}
+               </Typography>
+               )}
+                {userData && (
+                  <Typography
+                  fontSize="0.75rem"
+                  sx={{ color: theme.palette.secondary[200] }}
+                >
+                  {userData.profile__roles}
+                </Typography>
+                )}
+              </Box>
+              <ArrowDropDownOutlined
+                sx={{ color: theme.palette.secondary[300], fontSize: "25px" }}
+              />
+            </Button>
+            <Menu
+              anchorEl={anchorEl}
+              open={isOpen}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <MenuItem
+                 onClick={handleClose}
+                >
+                Logout</MenuItem>
+            </Menu>
+          </FlexBetween>
         </FlexBetween>
-
-    </Toolbar>
-
-  </AppBar>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 export default Navbar;

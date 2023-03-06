@@ -8,9 +8,12 @@ import Header from "scenes/components/Header";
 // import { width } from "@mui/system";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
-import { useAddUserMutation } from "state/api";
-import { useGetClassesQuery } from "state/api";
-import { useGetParentsQuery } from "state/api";
+// import { useAddUserMutation } from "state/api";
+// import { useGetClassesQuery } from "state/api";
+// import { useGetParentsQuery } from "state/api";
+import { useAddUserMutation } from "state/userApiSlice";
+import { useGetClassesQuery } from "state/userApiSlice";
+import { useGetParentsQuery } from "state/userApiSlice";
 
 const ROLES = [
   {
@@ -200,8 +203,8 @@ export default function AddUser() {
   const [parent, setParent] = useState("");
   const [classId, setClassId] = useState("");
   const [loadingBtn, setLoadingBtn] = useState(false);
-  const classList  = useGetClassesQuery();
-  const classData = classList ? classList.data : [];
+  const {data : classData}  = useGetClassesQuery();
+  // const classData = classList ? classList.data : [];
   // const [country, setCountry] = useState("");
   // const [state, setState] = useState("");
   // const [firstName, setFirstName] = useState("")

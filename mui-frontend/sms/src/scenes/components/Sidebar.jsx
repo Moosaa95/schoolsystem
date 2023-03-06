@@ -119,7 +119,6 @@ const navItems = [
     text: "Add-Class",
     icon: <ClassOutlined />,
   },
-  
 ];
 
 // function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
@@ -166,7 +165,7 @@ const Sidebar = ({
   const theme = useTheme();
 
   useEffect(() => {
-    setActive(pathname.substring(1));
+    // setActive(pathname.substring(1));
   }, [pathname]);
 
   const handleOpen = () => {
@@ -234,11 +233,11 @@ const Sidebar = ({
                         }}
                         sx={{
                           backgroundColor:
-                            active === lcText
+                            pathname === `/${lcText}`
                               ? theme.palette.secondary[300]
                               : "transparent",
                           color:
-                            active === lcText
+                            pathname === `/${lcText}`
                               ? theme.palette.primary[600]
                               : theme.palette.secondary[100],
                         }}
@@ -247,7 +246,7 @@ const Sidebar = ({
                           sx={{
                             ml: "2rem",
                             color:
-                              active === lcText
+                              pathname === `/${lcText}`
                                 ? theme.palette.primary[600]
                                 : theme.palette.secondary[200],
                           }}
@@ -262,49 +261,62 @@ const Sidebar = ({
                           ) : (
                             <ChevronRightOutlined sx={{ ml: "auto" }} />
                           ))
-                        ): (
+                        ) : (
                           <>
-                            <ChevronRightOutlined sx={{ ml : "auto" }} />
+                            <ChevronRightOutlined sx={{ ml: "auto" }} />
                           </>
                         )}
                       </ListItemButton>
                     </ListItem>
                     {active == lcText && (
-                      <Collapse in={open} timeout="auto" unmountOnExit>
+                      <Collapse
+                        in={
+                          open ||
+                          (children &&
+                            children.find(
+                              (child) => child.text.toLowerCase() == pathname
+                            ))
+                        }
+                        timeout="auto"
+                        unmountOnExit
+                      >
                         <ListItem>
                           {children &&
-                            children.map(({ text: subText, icon: subIcon }) =>{
+                            children.map(({ text: subText, icon: subIcon }) => {
                               const subLcText = subText.toLowerCase();
                               return (
-                              <ListItemButton
-                                // sx={{ pl: 4 }}
-                                onClick={() => {
-                                  navigate(`/${subLcText}`);
-                                  setActive(subLcText);
-                                }}
-                                sx={{
-                                  backgroundColor:
-                                    active === subLcText
-                                      ? theme.palette.secondary[300]
-                                      : "transparent",
-                                  color:
-                                    active === subLcText
-                                      ? theme.palette.primary[600]
-                                      : theme.palette.secondary[100],
-                                }}
-                              >
-                                <ListItemIcon
-                                  sx={{
-                                    ml: "2rem",
-                                    color:
-                                      active === subLcText
-                                        ? theme.palette.primary[600]
-                                        : theme.palette.secondary[200],
+                                <ListItemButton
+                                  // sx={{ pl: 4 }}
+                                  onClick={() => {
+                                    navigate(`/${subLcText}`);
+                                    // setActive(subLcText);
                                   }}
-                                >{subIcon}</ListItemIcon>
-                                <ListItemText primary={subLcText} />
-                              </ListItemButton>
-                            )})}
+                                  sx={{
+                                    backgroundColor:
+                                      pathname === `/${subLcText}`
+                                        ? theme.palette.secondary[300]
+                                        : "transparent",
+                                    color:
+                                      pathname === `/${subLcText}`
+                                        ? theme.palette.primary[600]
+                                        : theme.palette.secondary[100],
+                                  }}
+                                >
+                                  <ListItemIcon
+                                    sx={{
+                                      ml: "2rem",
+                                      color:
+                                        pathname === `/${subLcText}`
+                                          ? theme.palette.primary[600]
+                                          : theme.palette.secondary[200],
+                                    }}
+                                  >
+                                    {subIcon}
+                                  </ListItemIcon>
+                                  <ListItemText primary={subLcText} />
+                                </ListItemButton>
+                              );
+                            })}
                         </ListItem>
                       </Collapse>
                     )}

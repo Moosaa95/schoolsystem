@@ -9,8 +9,11 @@ import {
   PeopleOutlineOutlined,
 } from "@mui/icons-material";
 import StatBox from "scenes/components/StatBox";
-import { useTotalTeacherQuery } from "state/api";
-import { io } from "socket.io-client";
+// import { useTotalTeacherQuery } from "state/api";
+import { useTotalTeacherQuery } from "state/userApiSlice";
+// import { io } from "socket.io-client";
+import { selectCurrentUser, selectCurrentToken } from "state/authSlice";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   // TODO : getting live updated data from django
@@ -20,6 +23,10 @@ const Dashboard = () => {
 
   const theme = useTheme();
   const isNonMediumScreen = useMediaQuery("(min-width: 1200px)");
+  const user = useSelector(selectCurrentUser)
+  console.log("🚀 ~ file: DASHBOARd ~ Dashboard ~ user", user)
+  const token = useSelector(selectCurrentToken)
+  console.log("🚀 ~ file: DASHAOTD ~ Dashboard ~ token", token)
 
   const { data, loading } = useTotalTeacherQuery();
   // useEffect(() => {

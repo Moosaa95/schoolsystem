@@ -8,8 +8,10 @@ import Header from "scenes/components/Header";
 // import { width } from "@mui/system";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
-import { useAddClassMutation } from "state/api";
-import { useGetTeachersQuery } from "state/api";
+// import { useAddClassMutation } from "state/api";
+// import { useGetTeachersQuery } from "state/api";
+import { useGetTeachersQuery } from "state/userApiSlice";
+import { useAddClassMutation } from "state/userApiSlice";
 
 
 
